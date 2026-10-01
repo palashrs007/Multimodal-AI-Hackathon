@@ -14,10 +14,7 @@ const server = app.listen(env.PORT, async () => {
   try {
     await checkGeminiModelsHealth();
   } catch (err) {
-    logger.error({ err: err.message }, 'Failed during Gemini model health check on startup');
-    if (env.NODE_ENV === 'production') {
-      process.exit(1);
-    }
+    logger.warn({ err: err.message }, 'Gemini model health check reported issues on startup (continuing server operation)');
   }
 });
 

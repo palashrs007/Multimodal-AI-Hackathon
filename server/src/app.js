@@ -39,14 +39,28 @@ app.use(
   })
 );
 
-// Strict CORS allowlist
+// CORS allowlist supporting client origin, vercel deployments, and localhost
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow requests with no origin (like mobile apps, curl, server-to-server)
+      // Allow requests with no origin (like mobile apps, curl, health checks)
       if (!origin) return callback(null, true);
-      const allowedOrigins = [env.CLIENT_ORIGIN, 'http://localhost:5173', 'http://127.0.0.1:5173'];
-      if (allowedOrigins.includes(origin) || origin.startsWith('http://localhost:')) {
+      const configuredOrigins = (env.CLIENT_ORIGIN || '')
+        .split(',')
+        .map((o) => o.trim().replace(/\/$/, ''))
+        .filter(Boolean);
+      const allowedOrigins = [
+        ...configuredOrigins,
+        'https://client-one-beryl-61.vercel.app',
+        'http://localhost:5173',
+        'http://127.0.0.1:5173',
+      ];
+      const normalizedOrigin = origin.replace(/\/$/, '');
+      if (
+        allowedOrigins.includes(normalizedOrigin) ||
+        normalizedOrigin.startsWith('http://localhost:') ||
+        normalizedOrigin.endsWith('.vercel.app')
+      ) {
         return callback(null, true);
       }
       return callback(new Error(`Origin ${origin} not allowed by CORS`));

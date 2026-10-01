@@ -395,16 +395,10 @@ export async function checkGeminiModelsHealth() {
         status: 'FAILED',
         error: is404 ? 'Model not found (404)' : err.message,
       };
-      logger.error(
+      logger.warn(
         { role, model: modelName, error: err.message },
         `[AI HEALTH] ${role} model (${modelName}): FAILED (${err.message})`
       );
-
-      if (role === 'PRIMARY' && env.NODE_ENV === 'production') {
-        throw new Error(
-          `Production startup aborted: PRIMARY Gemini model (${modelName}) failed reachability check: ${err.message}`
-        );
-      }
     }
   }
 
