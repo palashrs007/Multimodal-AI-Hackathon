@@ -1,6 +1,12 @@
 import { supabase, isDevPlaceholderSupabase } from './supabase.js';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL ||
+  (typeof window !== 'undefined' &&
+   window.location.hostname !== 'localhost' &&
+   window.location.hostname !== '127.0.0.1'
+    ? 'https://wandershot-api.onrender.com/api'
+    : '/api');
 
 export class ApiError extends Error {
   constructor(message, code = 'API_ERROR', status = 400, details = null) {
