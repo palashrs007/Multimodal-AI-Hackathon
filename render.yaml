@@ -1,0 +1,50 @@
+services:
+  - type: web
+    name: wandershot-api
+    runtime: node
+    plan: free
+    region: oregon
+    rootDir: server
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: CLIENT_ORIGIN
+        value: https://client-one-beryl-61.vercel.app
+      - key: SUPABASE_URL
+        value: https://fvrfwabwthysrtuilkca.supabase.co
+      - key: SUPABASE_STORAGE_BUCKET
+        value: trip-uploads
+      - key: GEMINI_MODEL_PRIMARY
+        value: gemini-3.8-flash
+      - key: GEMINI_MODEL_ESCALATION
+        value: gemini-3.1-pro-preview
+      - key: GEMINI_MODEL_FALLBACK
+        value: gemini-3.1-flash-lite
+      - key: GEMINI_MODEL
+        value: gemini-3.8-flash
+      - key: GEMINI_GROUNDING
+        value: false
+      - key: GEMINI_MOCK
+        value: false
+      - key: MAX_IMAGES_PER_TRIP
+        value: 10
+      - key: MAX_IMAGE_MB
+        value: 5
+      - key: MAX_AUDIO_MB
+        value: 8
+      - key: DAILY_AI_CALL_LIMIT
+        value: 30
+      - key: SIGNED_URL_TTL_SECONDS
+        value: 3600
+      - key: SUPABASE_ANON_KEY
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
